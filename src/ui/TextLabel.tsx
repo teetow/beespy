@@ -1,6 +1,6 @@
 import { createStyleObject } from "@capsizecss/core";
 import interMetrics from "@capsizecss/metrics/inter";
-import { styled } from "../stitches.config";
+import { styled } from "../../stitches.config";
 
 const heading1Styles = createStyleObject({
   fontSize: 48,

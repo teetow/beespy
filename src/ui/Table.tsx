@@ -1,6 +1,6 @@
-import React, { Fragment } from "react";
-import ScoreTable from "../pages/index/ScoreTable";
-import { styled } from "../stitches.config";
+import { Fragment } from "react";
+import { styled } from "../../stitches.config";
+import ScoreTable from "../lib/ScoreTable";
 
 const TableView = styled("div", {
   display: "grid",

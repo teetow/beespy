@@ -11,13 +11,8 @@ export type Props = {
 };
 
 export const parsers = {
-  // "Center letter is in"
-  preamble: (str: string) => null,
-
-  // Letters
   letters: (str: string) => str.split(" ").map((s) => s.toLowerCase()),
 
-  // WORDS: 00, POINTS: 000, PANGRAMS: 00
   stats: (str: string) => str,
 
   tableHead: (str: string) =>

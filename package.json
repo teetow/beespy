@@ -11,6 +11,8 @@
     "coverage": "vitest run --coverage"
   },
   "dependencies": {
+    "@capsizecss/core": "^3.0.0",
+    "@capsizecss/metrics": "^0.3.0",
     "@radix-ui/colors": "^0.1.8",
     "@stitches/react": "^1.2.8",
     "react": "^18.2.0",
