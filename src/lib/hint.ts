@@ -1,9 +1,5 @@
-// import axios from "axios";
-// import * as cheerio from "cheerio";
 import { Linereader } from "./linereader";
-import ScoreTable, { ScoreCharCount, ScoreRow } from "./ScoreTable";
-
-// https://www.nytimes.com/2022/07/13/crosswords/spelling-bee-forum.html;
+import ScoreTable from "./ScoreTable";
 
 export type PairHints = Record<string, Record<string, number>>;
 
@@ -14,23 +10,12 @@ export type Props = {
   pairs?: PairHints;
 };
 
-const padNum = (num: number) => num.toString().padStart(2, "0");
-
-const dateUrl = (date: Date) => {
-  const [y, m, d] = [date.getFullYear(), padNum(date.getMonth() + 1), date.getDate()];
-  return `https://www.nytimes.com/${y}/${m}/${d}/crosswords/spelling-bee-forum.html`;
-};
-
 export const parsers = {
   // "Center letter is in"
   preamble: (str: string) => null,
 
   // Letters
-  letters: (str: string) =>
-    str
-      .replace(/\s+/gi, "")
-      .split("")
-      .map((s) => s.toLowerCase()),
+  letters: (str: string) => str.split(" ").map((s) => s.toLowerCase()),
 
   // WORDS: 00, POINTS: 000, PANGRAMS: 00
   stats: (str: string) => str,
@@ -42,25 +27,22 @@ export const parsers = {
       .map((n) => Number(n))
       .filter((n) => Number.isInteger(n)),
 
-  table: (str: string) => {
-    let [headRaw, ...rows] = str.split("\n");
-    const head = headRaw
-      .split("\t")
-      .map((n) => Number(n))
-      .filter((n) => Number.isInteger(n));
-
+  table: (head: number[], rows: string[]) => {
     return rows.reduce((obj, line) => {
       const [char, ...counts] = line.split("\t");
 
       return {
         ...obj,
-        [char[0].toLowerCase()]: counts.reduce(
-          (row, count, i) => ({
-            ...row,
-            [head[i]]: Number(count),
-          }),
-          {} as Record<number, number>
-        ),
+        ...(/[a-zA-Z]/.test(char) && {
+          [char[0].toLowerCase()]: counts.reduce(
+            (row, count, i) => ({
+              ...row,
+              ...(head[i] !== undefined &&
+                Number.isInteger(Number(count)) && { [head[i]]: Number(count) }),
+            }),
+            {} as Record<number, number>
+          ),
+        }),
       };
     }, {} as Record<string, Record<number, number>>);
   },
@@ -93,11 +75,9 @@ export const parsers = {
 export function getHint(input: string) {
   const r = new Linereader(input.split("\n"));
 
-  const readEmpty = () => {
-    if (r.readIf("")) {
-      return;
-    } else {
-      throw "Expected empty line";
+  const ffwd = () => {
+    while (r.nextLine.trim() === "") {
+      r.readLine();
     }
   };
 
@@ -105,27 +85,29 @@ export function getHint(input: string) {
     if (!r.readUntil("Center letter is in bold.")) {
       throw "Expected Spelling Bee clue page";
     }
-    readEmpty();
+    ffwd();
 
-    const letters = parsers.letters(r.read());
-    readEmpty();
+    const letters = parsers.letters(r.readLine());
+    ffwd();
 
-    const stats = parsers.stats(r.read());
-    readEmpty();
+    const stats = parsers.stats(r.readLine());
+    ffwd();
 
-    const head = parsers.tableHead(r.read());
-    const rows = parsers.table(r.read(8).join("\n"));
+    const head = parsers.tableHead(r.readLine());
+    const rows = parsers.table(head, r.read(7));
     const table = head ? new ScoreTable(head, { rows: rows }) : undefined;
 
-    if (!r.readUntil("Two letter list:")) {
+    if (!r.readLineIf("Two letter list:")) {
       throw "Expected two-letter list";
     }
+    if (r.nextLine.trim() === "") r.readLine();
     const pairLines = r.readUntilTrue((l) => l.trim() === "") as string[];
     const pairs = parsers.pairs(pairLines.join("\n"));
-    console.log({ letters, stats, table, pairs });
+
     return { letters, stats, table, pairs } as Props;
   } catch (error) {
     console.log(error);
+    return error;
   }
 }
 /**/

@@ -17,26 +17,29 @@ export class Linereader {
     return this._lines[this._ctr];
   }
 
-  public read(): string;
-  public read(lines: number): string[];
-  public read(lines: number = 1): string | string[] {
-    if (lines === 1) {
-      const line = this._lines[this._ctr];
-      this._ctr += 1;
-      return line;
-    }
+  public read(lines: number): string[] {
     const out = this._lines.slice(this._ctr, this._ctr + lines);
     this._ctr += lines;
     return out;
   }
 
-  readIf(str: string) {
-    if (this.nextLine === str) {
-      return this.read();
+  public readLine() {
+    return this.read(1)[0];
+  }
+
+  readIf(delegate: (s: string) => boolean, lines: number) {
+    if (delegate(this.nextLine)) {
+      return this.read(lines);
     }
   }
 
-  readAll(): string | string[] {
+  readLineIf(str: string) {
+    const res = this.readIf((s) => s === str, 1);
+    if (res) return res[0];
+
+  }
+
+  readAll(): string[] {
     return this.read(this._max - this._ctr);
   }
 
@@ -45,7 +48,7 @@ export class Linereader {
     const prevCtr = this._ctr;
 
     while (!this.eof) {
-      let line = this.read();
+      let line = this.readLine();
 
       lines = [...lines, line];
       if (comparator(line)) return lines;

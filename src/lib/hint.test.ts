@@ -1,40 +1,60 @@
 import { describe, expect, test } from "vitest";
 import { getHint, parsers } from "./hint";
 
-const testLetters = "A B C";
+const testLetters = "M D E I N P T";
+const testLettersResult = ["m", "d", "e", "i", "n", "p", "t"];
 
 test("letters", () => {
-  expect(parsers.letters(testLetters)).toEqual(["a", "b", "c"]);
+  expect(parsers.letters(testLetters)).toEqual(testLettersResult);
 });
 
-const testTable = `4	5	6
-A:	1	2	3
-B:	-1	1	-
-C:	1	-	2`;
+const testTable = `4	5	6	7	8	10	Σ
+D:	2	2	3	-	2	-	9
+E:	1	1	-	4	-	-	6
+I:	1	-	2	1	2	2	8
+M:	13	5	5	-	-	-	23
+P:	1	-	2	-	-	-	3
+T:	3	4	2	1	1	-	11
+Σ:	21	12	14	6	5	2	60`;
+
+const tableHeadResult = [4, 5, 6, 7, 8, 10];
 
 const testTableResult = {
-  a: { 4: 1, 5: 2, 6: 3 },
-  b: { 4: -1, 5: 1, 6: NaN },
-  c: { 4: 1, 5: NaN, 6: 2 },
+  d: { "4": 2, "5": 2, "6": 3, "8": 2 },
+  e: { "4": 1, "5": 1, "7": 4 },
+  i: { "4": 1, "6": 2, "7": 1, "8": 2, "10": 2 },
+  m: { "4": 13, "5": 5, "6": 5 },
+  p: { "4": 1, "6": 2 },
+  t: { "4": 3, "5": 4, "6": 2, "7": 1, "8": 1 },
 };
+describe("table", () => {
+  const [head, ...table] = testTable.split("\n");
+  const tableHead = parsers.tableHead(head);
 
-test("tableHead", () => {
-  const rs = parsers.tableHead(testTable);
-  expect(rs).toEqual([4, 5, 6]);
+  test("tableHead", () => {
+    expect(tableHead).toEqual(tableHeadResult);
+  });
+
+  test("tableBody", () => {
+    const rs = parsers.table(tableHead, table);
+    expect(rs).toEqual(testTableResult);
+  });
 });
 
-test("tableBody", () => {
-  const rs = parsers.table(testTable);
-  expect(rs).toEqual(testTableResult);
-});
+const testPairs = `DE-7 DI-2
+EM-6
+IM-7 IT-1
+ME-8 MI-15
+PE-1 PI-2
+TE-8 TI-3`;
 
-const testPairs = `AB-1 AC-2
-BC-3
-CA-3 CB-2 CC-1`;
 const testPairsResult = {
-  a: { ab: 1, ac: 2 },
-  b: { bc: 3 },
-  c: { ca: 3, cb: 2, cc: 1 },
+  d: { de: 7, di: 2 },
+  e: { em: 6 },
+  i: { im: 7, it: 1 },
+  m: { me: 8, mi: 15 },
+  p: { pe: 1, pi: 2 },
+  t: { te: 8, ti: 3 },
 };
 
 test("pairs", () => {
@@ -42,58 +62,28 @@ test("pairs", () => {
 });
 
 const fullTest = `
-SECTIONS
-SEARCH
-SKIP TO CONTENTSKIP TO SITE INDEXGAMEPLAY
-PLAY THE CROSSWORD
-
-Account
-Spelling Bee Forum
-Feeling stuck on today’s puzzle? We can help.
-
-Give this article
-
-
-854
-
-Credit...Courtesy of Philip Campbell
-
-By New York Times Games
-July 13, 2022
-WEDNESDAY — Hi busy bees! Welcome to today’s Spelling Bee forum. There are a number of terms that appear in both this article and other online discussions of the Spelling Bee; a glossary of those terms compiled by Monicat, a Times reader, can be found below. For more Spelling Bee conversation, check out Deb Amlen’s weekly humor column, “Diary of a Spelling Bee Fanatic.”
-
-
-Glossary of Spelling Bee Terms
-July 26, 2021
 Spelling Bee Grid
 Center letter is in bold.
 
-A B C
+${testLetters}
 
 WORDS: 60, POINTS: 274, PANGRAMS: 1
 
-4	5	6
-A:	1	2	3
-B:	-1	1	-
-C:	1	-	2
+${testTable}
 Two letter list:
 
-AB-1 AC-2
-BC-3
-CA-3 CB-2 CC-1
+${testPairs}
 
-Further Reading
-Think we missed a word? Email us: buzzwords@nytimes.com
 `;
 
 test("full hint", () => {
   const res = getHint(fullTest);
 
   expect(res).toEqual({
-    letters: testLetters,
+    letters: testLettersResult,
     stats: "WORDS: 60, POINTS: 274, PANGRAMS: 1",
     table: {
-      head: [4, 5, 6],
+      head: tableHeadResult,
       rows: testTableResult,
     },
     pairs: testPairsResult,

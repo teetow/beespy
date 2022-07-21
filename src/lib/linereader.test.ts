@@ -11,7 +11,7 @@ describe("Linereader -- basic", () => {
 
   test("Read one line", () => {
     const t = new Linereader(testData);
-    expect(t.read()).toEqual("hello");
+    expect(t.readLine()).toEqual("hello");
   });
 
   test("Read two lines", () => {
@@ -22,12 +22,36 @@ describe("Linereader -- basic", () => {
   test("Read two lines consecutively", () => {
     const t = new Linereader(testData);
 
-    expect([t.read(), t.read()]).toEqual(["hello", "world"]);
+    expect([t.readLine(), t.readLine()]).toEqual(["hello", "world"]);
   });
 
   test("Read past eof", () => {
     const t = new Linereader(testData);
     expect(t.read(5)).toEqual(testData);
+  });
+});
+
+const ifTest = `HELLO
+WORLD
+
+TELL ME
+HOW
+YA DOIN`;
+
+describe("readIf", () => {
+  const t = new Linereader(ifTest.split("\n"));
+  test(`undefined when not found`, () => {
+    expect(t.readLineIf("")).toBeUndefined();
+  });
+
+  test(`fail when reading the same line twice`, () => {
+    expect(t.readLineIf("HELLO")).toEqual("HELLO");
+    expect(t.readLineIf("HELLO")).toBeUndefined();
+  });
+
+  test(`fail when reading finding word, then empty line`, () => {
+    expect(t.readLineIf("WORLD")).toEqual("WORLD");
+    expect(t.readLineIf("")).toEqual("");
   });
 });
 
@@ -46,7 +70,7 @@ describe("readUntil", () => {
   test("Read until, then read next two lines consecutively", () => {
     const t = new Linereader(testData);
     t.readUntil("world");
-    expect([t.read(), t.read()]).toEqual(["tell me how", "ya doin'"]);
+    expect([t.readLine(), t.readLine()]).toEqual(["tell me how", "ya doin'"]);
   });
 
   test("ReadUntil fail", () => {
