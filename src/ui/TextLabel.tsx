@@ -44,17 +44,10 @@ export const Heading3 = styled("h3", {
   textAlign: "center",
 });
 
-const bodyStyles = createStyleObject({
-  fontSize: 16,
-  leading: 24,
-  fontMetrics: interMetrics,
-});
-
 const TextLabel = styled("p", {
   fontFamily: "$inter",
   fontWeight: 300,
   letterSpacing: 1.0,
-  ...bodyStyles,
 });
 
 export default TextLabel;

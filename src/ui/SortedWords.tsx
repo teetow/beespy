@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { styled } from "../../stitches.config";
-import { Heading3 } from "./TextLabel";
-import Stack from "./Stack";
+import { checkPangram } from "../lib/wordUtils";
 import A from "./A";
+import Stack from "./Stack";
+import { Heading3 } from "./TextLabel";
 
 const Word = styled("div", {
   display: "grid",
@@ -33,6 +34,11 @@ const Word = styled("div", {
         borderTop: "1px solid $sand7",
         paddingTop: "$sm",
         marginTop: "$xs",
+      },
+    },
+    pangram: {
+      true: {
+        color: "$yellow10",
       },
     },
   },
@@ -146,6 +152,7 @@ const SortedWords = ({ words }: SortedWordProps) => {
                           key={`${word}-${i}`}
                           break={isFirst}
                           css={isFirst ? { "--label": `"${prefix}"` } : {}}
+                          pangram={checkPangram(word)}
                         >
                           <span className="word">{word}</span>
                         </Word>

@@ -135,7 +135,7 @@ const Overview = ({ words, letters, stats, table, pairs }: Props) => {
   }, [words, table]);
 
   return (
-    <Stack css={{ gap: "$sm", justifyItems: "center" }} className="overview">
+    <Stack gap="sm" css={{ justifyItems: "center" }} className="overview">
       {letters ? <Letters letters={letters}></Letters> : <div>No letters</div>}
 
       <Stack css={{ className: "stack", gap: "$xs" }}>
@@ -143,10 +143,8 @@ const Overview = ({ words, letters, stats, table, pairs }: Props) => {
       </Stack>
 
       <Stack strip className="user" gap="lg">
-        <Box css={{ paddingTop: "3em" }}>{scoreTable && <Table table={scoreTable} />}</Box>
-        <Box css={{ paddingTop: "3em" }}>
-          {words && pairs && <Pairs pairs={diffPairs(pairs, getPairs(words))} />}
-        </Box>
+        <Box>{scoreTable && <Table table={scoreTable} />}</Box>
+        <Box>{words && pairs && <Pairs pairs={diffPairs(pairs, getPairs(words))} />}</Box>
       </Stack>
       <Box>{words && <SortedWords words={words} />}</Box>
     </Stack>

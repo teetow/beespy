@@ -4,9 +4,9 @@ import ScoreTable from "./ScoreTable";
 export type PairHints = Record<string, Record<string, number>>;
 
 export type HintProps = {
-  letters: string[];
-  stats: string;
-  table: ScoreTable;
+  letters?: string[];
+  stats?: string;
+  table?: ScoreTable;
   pairs?: PairHints;
 };
 
@@ -103,3 +103,8 @@ export function getHint(input: string): HintProps | undefined {
   }
 }
 /**/
+
+export const getTodayHintUrl = (date: Date) =>
+  `https://www.nytimes.com/${date.getFullYear()}/${(date.getMonth() + 1)
+    .toString()
+    .padStart(2, "0")}/${date.getDate()}/crosswords/spelling-bee-forum.html`;

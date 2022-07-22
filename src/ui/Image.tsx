@@ -1,5 +1,5 @@
 import { SVGProps } from "react";
-import Images from "../assets/images";
+import Images from "../lib/images";
 
 type Props = SVGProps<SVGSVGElement> & {
   image: keyof typeof Images;

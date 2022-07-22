@@ -19,9 +19,11 @@ const iframeCss = globalCss({
 type Props = {
   onClearHints: () => void;
   onClearWords: () => void;
+  showClearHints: boolean;
+  showClearWords: boolean;
 };
 
-const Header = ({ onClearHints, onClearWords }: Props) => {
+const Header = ({ onClearHints, showClearHints, onClearWords, showClearWords }: Props) => {
   const [now, setNow] = useState(new Date());
   const formattedDate = useRef();
 
@@ -29,30 +31,16 @@ const Header = ({ onClearHints, onClearWords }: Props) => {
 
   return (
     <Container strip align="center" gap="md">
-      <Popover>
-        <PopoverTrigger>Show puzzle</PopoverTrigger>
-        <PopoverContent>
-          <iframe className="spyframe" src="https://www.nytimes.com/puzzles/spelling-bee"></iframe>
-        </PopoverContent>
-      </Popover>
-
-      <Popover>
-        <PopoverTrigger>Hint page</PopoverTrigger>
-        <PopoverContent>
-          <iframe
-            className="spyframe"
-            src={`https://www.nytimes.com/${now.getFullYear()}/${(now.getMonth() + 1)
-              .toString()
-              .padStart(2, "0")}/${now.getDate()}/crosswords/spelling-bee-forum.html`}
-          />
-        </PopoverContent>
-      </Popover>
-      <A href="#" onClick={onClearHints}>
-        <TextLabel>Clear hints</TextLabel>
-      </A>
-      <A href="#" onClick={onClearWords}>
-        <TextLabel>Clear words</TextLabel>
-      </A>
+      {showClearHints && (
+        <A href="#" onClick={onClearHints}>
+          <TextLabel>Clear hints</TextLabel>
+        </A>
+      )}
+      {showClearWords && (
+        <A href="#" onClick={onClearWords}>
+          <TextLabel>Clear words</TextLabel>
+        </A>
+      )}
     </Container>
   );
 };

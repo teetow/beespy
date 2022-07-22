@@ -27,3 +27,8 @@ export const Range = (lengthOrStart: number, end?: number, step: number = 1) => 
     },
   };
 };
+
+export const isEmpty = (obj: any) =>
+  obj && // 👈 null and undefined check
+  Object.keys(obj).length === 0 &&
+  Object.getPrototypeOf(obj) === Object.prototype;
