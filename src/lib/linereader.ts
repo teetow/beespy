@@ -5,7 +5,7 @@ export class Linereader {
 
   constructor(lines: string[]) {
     this._ctr = 0;
-    this._lines = lines;
+    this._lines = lines.map(l => l.trim());
     this._max = lines.length - 1;
   }
 

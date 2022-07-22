@@ -1,8 +1,11 @@
-import { useState } from "react";
+import { ClipboardEvent, useState } from "react";
 import { globalCss, styled } from "../stitches.config";
-import { Props } from "./lib/hint";
+import ErrorBoundary from "./ErrorBoundary";
+import Header from "./Header";
+import { getHint, HintProps } from "./lib/hint";
+import Loader from "./Loader";
 import Overview from "./Overview";
-import Pastebox from "./Pastebox";
+import Stack from "./ui/Stack";
 
 const fonts = ["Inter:wght@100..900", "Roboto+Mono:wght@100;200;300;400;500;600;700;800;900"];
 const fq = (name: string) => `family=${name}`;
@@ -28,20 +31,66 @@ const bodyStyles = globalCss({
   },
 });
 
-const AppView = styled("div", {});
+const AppView = styled(Stack, {
+  padding: "$md",
+  gap: "$lg",
+  placeContent: "start center",
+  placeItems: "center",
+});
 
-const Loader = styled("div", {});
+const loadLocal = (key: string) => {
+  if ("localStorage" in globalThis) {
+    const thing = globalThis.localStorage.getItem(key);
+    if (thing) {
+      return JSON.parse(thing);
+    }
+  }
+};
+
+const storeLocal = (key: string, obj: any) => {
+  if ("localStorage" in globalThis) {
+    const thing = globalThis.localStorage.setItem(key, JSON.stringify(obj));
+  }
+};
+
+const storeKeyWords = "beespy-words";
+const storeKeyHints = "beespy-hints";
 
 function App() {
-  const [userWords, setUserWords] = useState<string[]>();
-  const [hints, setHints] = useState<Props>();
+  const restoreWords = () => {};
+
+  const [words, setWords] = useState<string[] | undefined>(loadLocal(storeKeyWords) || []);
+  const [hints, setHints] = useState<HintProps | undefined>(loadLocal(storeKeyHints));
+
+  const handlePaste = (event: ClipboardEvent<HTMLDivElement>) => {
+    const data = event.clipboardData.getData("text");
+
+    if (data.includes("Center letter is in bold.")) {
+      console.log("You pasted a hint page.");
+      const h = getHint(data);
+      if (h) {
+        setHints(h);
+        storeLocal(storeKeyHints, h);
+      }
+    } else {
+      console.log("you pasted words.");
+      const words = data
+        .split("\n")
+        .map((w) => w.trim())
+        .filter((w) => w !== "");
+      setWords(words);
+      storeLocal(storeKeyWords, words);
+    }
+  };
 
   bodyStyles();
   return (
-    <AppView className="App">
-      <Pastebox></Pastebox>
-      {hints ? <Overview {...{ ...hints }}></Overview> : <Loader>No data yet.</Loader>}
-    </AppView>
+    <ErrorBoundary>
+      <AppView className="App" onPaste={handlePaste}>
+        <Header onClearHints={() => setHints(undefined)} onClearWords={() => setWords([])}></Header>
+        {hints ? <Overview {...{ words, ...hints }}></Overview> : <Loader />}
+      </AppView>
+    </ErrorBoundary>
   );
 }
 

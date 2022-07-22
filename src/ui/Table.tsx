@@ -3,9 +3,11 @@ import { styled } from "../../stitches.config";
 import ScoreTable from "../lib/ScoreTable";
 
 const TableView = styled("div", {
+  "--cols": 8,
+  "--rows": 8,
   display: "grid",
-  gridTemplateColumns: "repeat(8, 2rem)",
-  gridTemplateRows: "repeat(8, 2rem)",
+  gridTemplateColumns: "repeat(var(--cols), 2rem)",
+  gridTemplateRows: "repeat(var(--rows), 2rem)",
   gridAutoFlow: "row",
   fontWeight: 700,
 });
@@ -60,9 +62,9 @@ type TableProps = {
 
 const Table = ({ table }: TableProps) => {
   return (
-    <TableView>
+    <TableView css={{ "--cols": table.head.length + 1 }}>
       {table.head.map((thead, i) => (
-        <Cell key={`${thead}-${i}`} header="column" css={{ gridColumn: i + 1 }}>
+        <Cell key={`${thead}-${i}`} header="column" css={{ gridColumn: i + 2 }}>
           {thead}
         </Cell>
       ))}
@@ -76,7 +78,7 @@ const Table = ({ table }: TableProps) => {
 
             {Object.entries(row).map(([length, count], i) => {
               const currentLength = Number(length);
-              const currentColumn = ScoreTable.columnForLength(table, currentLength) + 1;
+              const currentColumn = ScoreTable.columnForLength(table, currentLength) + 2;
 
               return (
                 <Cell

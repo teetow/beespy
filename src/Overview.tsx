@@ -1,6 +1,6 @@
 import { ClipboardEvent, PropsWithChildren, useEffect, useState } from "react";
 import { styled } from "../stitches.config";
-import { PairHints, Props } from "./lib/hint";
+import { PairHints, HintProps as HintProps } from "./lib/hint";
 import ScoreTable from "./lib/ScoreTable";
 import SortedWords from "./ui/SortedWords";
 import Stack from "./ui/Stack";
@@ -82,9 +82,9 @@ const Pairs = ({ pairs }: PairProps) => {
         })
         .map(([key, pairhints], i) => {
           return (
-            <Stack strip key={`${i}`} className="pair-char" gap="s">
+            <Stack strip key={`${i}`} className="pair-char" gap="sm">
               {Object.entries(pairhints).map(([prefix, count], i) => {
-                return <Pair key={`${i}`}>{`${prefix}-${count}`}</Pair>;
+                return <Pair key={`${i}`}>{`${prefix.toUpperCase()}-${count}`}</Pair>;
               })}
             </Stack>
           );
@@ -113,61 +113,42 @@ const Letters = ({ letters }: PropsWithChildren<{ letters: string[] }>) => {
 
 const localstoreKey = "beespy-userwords";
 
-const Overview = ({ letters, stats, table, pairs }: Props) => {
-  let storedWords = [];
-  if ("localStorage" in globalThis) {
-    const words = globalThis.localStorage.getItem(localstoreKey);
-    if (words) {
-      storedWords = JSON.parse(words);
-    }
-  }
+type Props = HintProps & {
+  words?: string[];
+};
 
-  const [userWords, setUserWords] = useState<string[]>(storedWords || []);
+const Overview = ({ words, letters, stats, table, pairs }: Props) => {
   const [scoreTable, setScoreTable] = useState<ScoreTable>();
 
-  const handlePaste = (event: ClipboardEvent<HTMLDivElement>) => {
-    const data = event.clipboardData.getData("text");
-
-    if (data.includes("Center letter is in bold.")) {
-      console.log("You pasted a hint page.");
-    } else {
-      const words = data
-        .split("\n")
-        .map((w) => w.trim())
-        .filter((w) => w !== "");
-      setUserWords(words);
-    }
-  };
-
   useEffect(() => {
-    if (!userWords) return;
+    if (!words) return;
 
     if ("localStorage" in globalThis) {
-      globalThis.localStorage.setItem(localstoreKey, JSON.stringify(userWords));
+      globalThis.localStorage.setItem(localstoreKey, JSON.stringify(words));
     }
-  }, [userWords]);
+  }, [words]);
 
   useEffect(() => {
-    if (!table || !userWords) return;
-    const userTable = new ScoreTable(table.head, { words: userWords });
+    if (!table || !words) return;
+    const userTable = new ScoreTable(table.head, { words: words });
     setScoreTable(ScoreTable.subtract(table, userTable));
-  }, [userWords, table]);
+  }, [words, table]);
 
   return (
-    <Stack css={{ gap: "$sm", justifyItems: "center" }} onPaste={handlePaste} className="overview">
+    <Stack css={{ gap: "$sm", justifyItems: "center" }} className="overview">
       {letters ? <Letters letters={letters}></Letters> : <div>No letters</div>}
 
       <Stack css={{ className: "stack", gap: "$xs" }}>
         <Heading3>{stats || "no stats"}</Heading3>
       </Stack>
 
-      <Stack strip className="user" gap="l">
+      <Stack strip className="user" gap="lg">
         <Box css={{ paddingTop: "3em" }}>{scoreTable && <Table table={scoreTable} />}</Box>
         <Box css={{ paddingTop: "3em" }}>
-          {pairs && <Pairs pairs={diffPairs(pairs, getPairs(userWords))} />}
+          {words && pairs && <Pairs pairs={diffPairs(pairs, getPairs(words))} />}
         </Box>
       </Stack>
-      <Box>{userWords && <SortedWords words={userWords} onClear={() => setUserWords([])} />}</Box>
+      <Box>{words && <SortedWords words={words} />}</Box>
     </Stack>
   );
 };

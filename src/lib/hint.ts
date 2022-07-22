@@ -3,7 +3,7 @@ import ScoreTable from "./ScoreTable";
 
 export type PairHints = Record<string, Record<string, number>>;
 
-export type Props = {
+export type HintProps = {
   letters: string[];
   stats: string;
   table: ScoreTable;
@@ -67,7 +67,7 @@ export const parsers = {
 };
 
 //*/
-export function getHint(input: string) {
+export function getHint(input: string): HintProps | undefined {
   const r = new Linereader(input.split("\n"));
 
   const ffwd = () => {
@@ -92,17 +92,14 @@ export function getHint(input: string) {
     const rows = parsers.table(head, r.read(7));
     const table = head ? new ScoreTable(head, { rows: rows }) : undefined;
 
-    if (!r.readLineIf("Two letter list:")) {
-      throw "Expected two-letter list";
-    }
-    if (r.nextLine.trim() === "") r.readLine();
+    r.readUntil("Two letter list:");
+    ffwd();
     const pairLines = r.readUntilTrue((l) => l.trim() === "") as string[];
     const pairs = parsers.pairs(pairLines.join("\n"));
 
-    return { letters, stats, table, pairs } as Props;
+    return { letters, stats, table, pairs } as HintProps;
   } catch (error) {
     console.log(error);
-    return error;
   }
 }
 /**/

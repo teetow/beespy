@@ -1,72 +1,8 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { styled } from "../../stitches.config";
 import { Heading3 } from "./TextLabel";
-
-const Stack = styled("div", {
-  display: "grid",
-  gridAutoFlow: "row",
-  alignContent: "start",
-  justifyContent: "start",
-
-  variants: {
-    align: {
-      start: { alignItems: "start" },
-      center: { alignItems: "center" },
-      stretch: { alignItems: "stretch" },
-    },
-    justify: {
-      start: { justifyItems: "start" },
-      center: { justifyItems: "center" },
-      stretch: { justifyItems: "stretch" },
-    },
-    gap: {
-      none: {
-        gap: "0",
-      },
-      xxxs: {
-        gap: "0.125rem",
-      },
-      xxs: {
-        gap: "0.25rem",
-      },
-      xs: {
-        gap: "0.5rem",
-      },
-      s: {
-        gap: "1rem",
-      },
-      m: {
-        gap: "2rem",
-      },
-      l: {
-        gap: "4rem",
-      },
-    },
-    padding: {
-      xs: {
-        padding: "0.5rem",
-      },
-      s: {
-        padding: "1rem",
-      },
-      m: {
-        padding: "2rem",
-      },
-      l: {
-        padding: "4rem",
-      },
-    },
-    strip: {
-      true: {
-        gridAutoFlow: "column",
-      },
-    },
-  },
-});
-
-const A = styled("a", {
-  color: "$yellow11",
-});
+import Stack from "./Stack";
+import A from "./A";
 
 const Word = styled("div", {
   display: "grid",
@@ -145,10 +81,9 @@ const defaultMethod: SortMethod = "length";
 
 type SortedWordProps = {
   words: string[];
-  onClear: () => void;
 };
 
-const SortedWords = ({ words, onClear }: SortedWordProps) => {
+const SortedWords = ({ words }: SortedWordProps) => {
   const [method, setMethod] = useState<SortMethod>(defaultMethod);
   const [sortedWords, setSortedWords] = useState<string[]>();
   const [groupedWords, setGroupedWords] = useState<Record<string, Record<string, string[]>>>();
@@ -168,7 +103,7 @@ const SortedWords = ({ words, onClear }: SortedWordProps) => {
 
   return (
     <Stack css={{ fontFamily: "$code", fontWeight: 300 }}>
-      <Stack strip gap="m" align="center">
+      <Stack strip gap="md" align="center">
         <Heading3>{`${sortedWords?.length} words`}</Heading3>
 
         <A href="#" onClick={handleSortClick}>
@@ -176,16 +111,12 @@ const SortedWords = ({ words, onClear }: SortedWordProps) => {
             {method === "alpha" ? "Alphabetical" : "By Length"}
           </Heading3>
         </A>
-
-        <A href="#" onClick={onClear} css={{ justifySelf: "end" }}>
-          <Heading3 css={{ fontSize: "0.8rem" }}>Clear</Heading3>
-        </A>
       </Stack>
 
       <Stack
         className="user-sorted-words"
         strip
-        gap="s"
+        gap="sm"
         css={{
           gridTemplateColumns: `repeat(${
             (groupedWords && Object.keys(groupedWords).length) || 7

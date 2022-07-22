@@ -1,5 +1,8 @@
 import { styled } from "../../stitches.config";
 
+// const Box = styled("div", {});
+
+// const Stack = styled(Box, {
 const Stack = styled("div", {
   display: "grid",
   gridAutoFlow: "row",
@@ -30,13 +33,13 @@ const Stack = styled("div", {
       xs: {
         gap: "0.5rem",
       },
-      s: {
+      sm: {
         gap: "1rem",
       },
-      m: {
+      md: {
         gap: "2rem",
       },
-      l: {
+      lg: {
         gap: "4rem",
       },
     },
@@ -44,13 +47,13 @@ const Stack = styled("div", {
       xs: {
         padding: "0.5rem",
       },
-      s: {
+      sm: {
         padding: "1rem",
       },
-      m: {
+      md: {
         padding: "2rem",
       },
-      l: {
+      lg: {
         padding: "4rem",
       },
     },
