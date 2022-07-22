@@ -1,5 +1,6 @@
 {
   "name": "beespy",
+  "homepage": "https://teetow.com/beespy",
   "private": true,
   "version": "0.0.0",
   "type": "module",
