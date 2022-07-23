@@ -28,9 +28,10 @@ const bodyStyles = globalCss({
 });
 
 const AppView = styled(Stack, {
-  padding: "$md 0",
+  margin: "$md auto",
   placeContent: "start center",
   placeItems: "center",
+  maxWidth: "60rem",
 });
 
 const loadLocal = (key: string) => {

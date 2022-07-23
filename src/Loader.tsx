@@ -4,14 +4,22 @@ import { getTodayHintUrl } from "./lib/hint";
 import A from "./ui/A";
 import Image from "./ui/Image";
 import Stack from "./ui/Stack";
-import TextLabel, { Heading1, Heading2, Heading3 } from "./ui/TextLabel";
+import TextLabel, { Heading1, Heading2 } from "./ui/TextLabel";
 
-const flutterAnim = keyframes({
-  "0%": { "--rot": 0.0 },
-  "25%": { "--rot": 0.5 },
-  "50%": { "--rot": 1.0 },
-  "75%": { "--rot": 0.5 },
-  "100%": { "--rot": 0.0 },
+const flutterAnimL = keyframes({
+  "0%": { transform: "rotate(0.0deg)" },
+  "25%": { transform: "rotate(2deg)" },
+  "50%": { transform: "rotate(3deg)" },
+  "75%": { transform: "rotate(2deg)" },
+  "100%": { transform: "rotate(0.0deg)" },
+});
+
+const flutterAnimR = keyframes({
+  "0%": { transform: "rotate(0.0deg)" },
+  "25%": { transform: "rotate(-2deg)" },
+  "50%": { transform: "rotate(-3deg)" },
+  "75%": { transform: "rotate(-2deg)" },
+  "100%": { transform: "rotate(0.0deg)" },
 });
 
 const beeStyle = globalCss({
@@ -20,16 +28,20 @@ const beeStyle = globalCss({
     transformOrigin: "center",
 
     "#wingL": {
-      animation: `${flutterAnim} 0.16s infinite`,
-      transform: "rotate(calc(var(--rot) * 3deg))",
+      animation: `${flutterAnimL} 0.16s infinite`,
       transformOrigin: "50% 30%",
     },
     "#wingR": {
-      animation: `${flutterAnim} 0.16s infinite`,
-      transform: "rotate(calc(var(--rot) * -3deg))",
+      animation: `${flutterAnimR} 0.16s infinite`,
       transformOrigin: "50% 30%",
     },
   },
+});
+
+const Ol = styled("ol", {
+  lineHeight: "1.667em",
+  padding: 0,
+  margin: 0,
 });
 
 const Container = styled(Stack, {
@@ -43,47 +55,55 @@ const Loader = ({}: Props) => {
 
   return (
     <Container css={{ placeItems: "center", placeContent: "center" }}>
-      <Image id="bee" image="bee" style={{ width: "18em", height: "18em" }}></Image>
+      <Image id="bee" image="bee" style={{ width: "12em", height: "12em" }}></Image>
       <Heading1>Hello!</Heading1>
-      <Heading3>
+      <TextLabel css={{ textAlign: "center" }}>
         This is BeeSpy, a little helper app for solving the New York Times' puzzle Spelling Bee.
-      </Heading3>
-      <Stack strip gap="md" css={{ gridTemplateColumns: "1fr 1fr", maxWidth: "80%" }}>
+      </TextLabel>
+      <Stack strip={{ "@bp2": true }} gap="md" css={{ maxWidth: "80%" }}>
         <Stack>
           <Heading2>Setup</Heading2>
-          <ol>
+          <Ol>
             <li>
-              <span>
+              <TextLabel>
                 Visit the{" "}
                 <A css={{ display: "inline" }} href={getTodayHintUrl(new Date())} target="_blank">
                   Spelling Bee Forum
                 </A>
-              </span>
+              </TextLabel>
             </li>
-            <li>Hit Ctrl-A to select all the text</li>
-            <li>Hit Ctrl-C to copy</li>
-            <li>Come back here and hit Ctrl-V to paste</li>
-            <li>Now you have today's hints!</li>
-          </ol>
+            <li>
+              <TextLabel>Hit Ctrl-A to select all the text</TextLabel>
+            </li>
+            <li>
+              <TextLabel>Hit Ctrl-C to copy</TextLabel>
+            </li>
+            <li>
+              <TextLabel>Come back here and hit Ctrl-V to paste</TextLabel>
+            </li>
+            <li>
+              <TextLabel>Now you have today's hints!</TextLabel>
+            </li>
+          </Ol>
         </Stack>
         <Stack>
           <Heading2>Usage</Heading2>
-          <p>
+          <TextLabel>
             Once you've done the setup, you can just copy-and-paste the list of words from your
             Spelling Bee{" "}
             <A href="https://www.nytimes.com/puzzles/spelling-bee" target="_blank">
               puzzle page
             </A>{" "}
             to update the hints.
-          </p>
-          <p>
+          </TextLabel>
+          <TextLabel>
             BeeSpy will give you an interactive version of the Spelling Bee hint grid and two-letter
             list, and highlight any pangrams you've already found.
-          </p>
-          <p>
+          </TextLabel>
+          <TextLabel>
             Note: BeeSpy does NOT know which words are valid. You can paste the phone book for all
             it cares.
-          </p>
+          </TextLabel>
         </Stack>
       </Stack>
     </Container>
