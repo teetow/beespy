@@ -72,7 +72,7 @@ function App() {
       console.log("you pasted words.");
       const words = data
         .split("\n")
-        .map((w) => w.trim())
+        .map((w) => w.trim().toLowerCase())
         .filter((w) => w !== "");
       setWords(words);
     }

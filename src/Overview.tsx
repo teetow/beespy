@@ -35,7 +35,7 @@ const ListItem = styled("li", {
 function getPairs(words: string[]) {
   const pairs = words.reduce((acc, word) => {
     const char: string = word[0];
-    const prefix: string = word.slice(0, 2).toUpperCase();
+    const prefix: string = word.slice(0, 2).toLowerCase();
 
     let count = 0;
     if (char in acc) {
@@ -111,22 +111,12 @@ const Letters = ({ letters }: PropsWithChildren<{ letters: string[] }>) => {
   );
 };
 
-const localstoreKey = "beespy-userwords";
-
 type Props = HintProps & {
   words?: string[];
 };
 
 const Overview = ({ words, letters, stats, table, pairs }: Props) => {
   const [scoreTable, setScoreTable] = useState<ScoreTable>();
-
-  useEffect(() => {
-    if (!words) return;
-
-    if ("localStorage" in globalThis) {
-      globalThis.localStorage.setItem(localstoreKey, JSON.stringify(words));
-    }
-  }, [words]);
 
   useEffect(() => {
     if (!table || !words) return;
