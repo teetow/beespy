@@ -18,7 +18,7 @@ const bodyStyles = globalCss({
     minHeight: "100vh",
   },
   body: {
-    backgroundColor: "$sand5",
+    backgroundColor: "$sand3",
     color: "$sand12",
     display: "grid",
     fontFamily: "$inter",

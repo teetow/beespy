@@ -1,9 +1,8 @@
-import { Popover, PopoverContent, PopoverTrigger } from "@radix-ui/react-popover";
 import { useRef, useState } from "react";
 import { globalCss, styled } from "../stitches.config";
 import A from "./ui/A";
 import Stack from "./ui/Stack";
-import TextLabel from "./ui/TextLabel";
+import { P } from "./ui/TextLabel";
 
 const Container = styled(Stack, {});
 
@@ -33,12 +32,12 @@ const Header = ({ onClearHints, showClearHints, onClearWords, showClearWords }: 
     <Container strip align="center" gap="md">
       {showClearHints && (
         <A href="#" onClick={onClearHints}>
-          <TextLabel>Clear hints</TextLabel>
+          <P>Clear hints</P>
         </A>
       )}
       {showClearWords && (
         <A href="#" onClick={onClearWords}>
-          <TextLabel>Clear words</TextLabel>
+          <P>Clear words</P>
         </A>
       )}
     </Container>

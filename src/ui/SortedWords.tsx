@@ -3,7 +3,7 @@ import { styled } from "../../stitches.config";
 import { checkPangram } from "../lib/wordUtils";
 import A from "./A";
 import Stack from "./Stack";
-import { Heading3 } from "./TextLabel";
+import { H3 } from "./TextLabel";
 
 const Word = styled("div", {
   display: "grid",
@@ -110,12 +110,12 @@ const SortedWords = ({ words }: SortedWordProps) => {
   return (
     <Stack css={{ fontFamily: "$code", fontWeight: 300 }}>
       <Stack strip gap="md" align="center">
-        <Heading3>{`${sortedWords?.length} words`}</Heading3>
+        <H3>{`${sortedWords?.length} words`}</H3>
 
         <A href="#" onClick={handleSortClick}>
-          <Heading3 css={{ fontSize: "0.8rem" }}>
+          <H3 css={{ fontSize: "0.8rem" }}>
             {method === "alpha" ? "Alphabetical" : "By Length"}
-          </Heading3>
+          </H3>
         </A>
       </Stack>
 
@@ -138,9 +138,9 @@ const SortedWords = ({ words }: SortedWordProps) => {
                 gap="xs"
                 css={{ justifyContent: "stretch" }}
               >
-                <Heading3 css={{ textAlign: "left", paddingBottom: "1rem" }}>
+                <H3 css={{ textAlign: "left", paddingBottom: "1rem" }}>
                   {char.toUpperCase()}
-                </Heading3>
+                </H3>
 
                 {Object.entries(charGroup).map(([prefix, prefixGroup]) => {
                   return prefixGroup

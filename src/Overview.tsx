@@ -5,7 +5,7 @@ import ScoreTable from "./lib/ScoreTable";
 import SortedWords from "./ui/SortedWords";
 import Stack from "./ui/Stack";
 import Table from "./ui/Table";
-import { Heading3 } from "./ui/TextLabel";
+import { H3 } from "./ui/TextLabel";
 
 const Box = styled("div", {});
 
@@ -129,7 +129,7 @@ const Overview = ({ words, letters, stats, table, pairs }: Props) => {
       {letters ? <Letters letters={letters}></Letters> : <div>No letters</div>}
 
       <Stack css={{ className: "stack", gap: "$xs" }}>
-        <Heading3>{stats || "no stats"}</Heading3>
+        <H3>{stats || "no stats"}</H3>
       </Stack>
 
       <Stack strip className="user" gap="lg">
