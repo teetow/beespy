@@ -58,19 +58,19 @@ describe("readIf", () => {
 describe("readUntil", () => {
   test("Read until", () => {
     const t = new Linereader(testData);
-    expect(t.readUntil("world")).toEqual(["hello", "world"]);
+    expect(t.readUntil("world")).toEqual(["hello"]);
   });
 
   test("Read until, then read next two lines", () => {
     const t = new Linereader(testData);
     t.readUntil("world");
-    expect(t.read(2)).toEqual(["tell me how", "ya doin'"]);
+    expect(t.read(2)).toEqual(["world", "tell me how"]);
   });
 
   test("Read until, then read next two lines consecutively", () => {
     const t = new Linereader(testData);
     t.readUntil("world");
-    expect([t.readLine(), t.readLine()]).toEqual(["tell me how", "ya doin'"]);
+    expect([t.readLine(), t.readLine()]).toEqual(["world", "tell me how"]);
   });
 
   test("ReadUntil fail", () => {
@@ -81,6 +81,6 @@ describe("readUntil", () => {
   test("ReadUntil fail, then hit", () => {
     const t = new Linereader(testData);
     t.readUntil("not found");
-    expect(t.readUntil("world")).toEqual(["hello", "world"]);
+    expect(t.readUntil("world")).toEqual(["hello"]);
   });
 });

@@ -18,7 +18,7 @@ const bodyStyles = globalCss({
     minHeight: "100vh",
   },
   body: {
-    backgroundColor: "$sand3",
+    backgroundColor: "$appbg",
     color: "$sand12",
     display: "grid",
     fontFamily: "$inter",
@@ -28,10 +28,11 @@ const bodyStyles = globalCss({
 });
 
 const AppView = styled(Stack, {
-  margin: "$md auto",
+  gap: "$md",
+  margin: "0 auto",
+  maxWidth: "60rem",
   placeContent: "start center",
   placeItems: "center",
-  maxWidth: "60rem",
 });
 
 const loadLocal = (key: string) => {

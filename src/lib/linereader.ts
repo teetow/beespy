@@ -5,7 +5,7 @@ export class Linereader {
 
   constructor(lines: string[]) {
     this._ctr = 0;
-    this._lines = lines.map(l => l.trim());
+    this._lines = lines.map((l) => l.trim());
     this._max = lines.length - 1;
   }
 
@@ -36,27 +36,28 @@ export class Linereader {
   readLineIf(str: string) {
     const res = this.readIf((s) => s === str, 1);
     if (res) return res[0];
-
   }
 
   readAll(): string[] {
     return this.read(this._max - this._ctr);
   }
 
-  readUntilTrue(comparator: (line: string) => boolean): string | string[] | void {
+  readUntilTrue(comparator: (line: string) => boolean): string | string[] | undefined {
     let lines = new Array<string>();
     const prevCtr = this._ctr;
 
     while (!this.eof) {
-      let line = this.readLine();
+      let line = this.nextLine;
+      if (comparator(line)) return lines;
+
+      line = this.readLine();
 
       lines = [...lines, line];
-      if (comparator(line)) return lines;
     }
     this._ctr = prevCtr;
   }
 
-  readUntil(input: string): string | string[] | void {
+  readUntil(input: string): string | string[] | undefined {
     return this.readUntilTrue((w) => w === input);
   }
 }

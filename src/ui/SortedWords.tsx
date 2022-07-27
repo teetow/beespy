@@ -15,7 +15,7 @@ const Word = styled("div", {
 
   "&:before": {
     alignSelf: "center",
-    backgroundColor: "$sand5",
+    backgroundColor: "$appbg",
     color: "$sand10",
     content: "var(--label)",
     fontSize: "0.9em",

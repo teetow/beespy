@@ -22,7 +22,15 @@ export const parsers = {
       .map((n) => Number(n))
       .filter((n) => Number.isInteger(n)),
 
-  table: (head: number[], rows: string[]) => {
+  table: (head: number[], rows: string[] | string | undefined) => {
+    if (!rows) {
+      return;
+    }
+
+    if (typeof rows === "string") {
+      rows = [rows];
+    }
+
     return rows.reduce((obj, line) => {
       const [char, ...counts] = line.split("\t");
 
@@ -80,6 +88,7 @@ export function getHint(input: string): HintProps | undefined {
     if (!r.readUntil("Center letter is in bold.")) {
       throw "Expected Spelling Bee clue page";
     }
+    r.readLine();
     ffwd();
 
     const letters = parsers.letters(r.readLine());
@@ -89,11 +98,12 @@ export function getHint(input: string): HintProps | undefined {
     ffwd();
 
     const head = parsers.tableHead(r.readLine());
-    const rows = parsers.table(head, r.read(7));
+    const rows = parsers.table(head, r.readUntil("Two letter list:"));
     const table = head ? new ScoreTable(head, { rows: rows }) : undefined;
-
-    r.readUntil("Two letter list:");
     ffwd();
+    r.readLine();
+    ffwd();
+
     const pairLines = r.readUntilTrue((l) => l.trim() === "") as string[];
     const pairs = parsers.pairs(pairLines.join("\n"));
 
