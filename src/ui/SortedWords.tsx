@@ -9,7 +9,7 @@ const Word = styled("div", {
   display: "grid",
   gridTemplateAreas: `"main"`,
 
-  "& > word": {
+  "& > .word": {
     gridArea: "main",
   },
 
@@ -28,6 +28,12 @@ const Word = styled("div", {
     transform: "translate(0, -1.9em)",
   },
 
+  "&:after": {
+    content: "var(--deco)",
+    gridRow: "1",
+    justifySelf: "end",
+  },
+
   variants: {
     break: {
       true: {
@@ -43,6 +49,8 @@ const Word = styled("div", {
     },
   },
 });
+
+const getDeco = (word: string) => ({ aurora: `"😸"` }[word]);
 
 const groupGroupsBy = (words: string[], method: SortMethod) => {
   const groupedWords = words.reduce((acc, word) => {
@@ -113,9 +121,7 @@ const SortedWords = ({ words }: SortedWordProps) => {
         <H3>{`${sortedWords?.length} words`}</H3>
 
         <A href="#" onClick={handleSortClick}>
-          <H3 css={{ fontSize: "0.8rem" }}>
-            {method === "alpha" ? "Alphabetical" : "By Length"}
-          </H3>
+          <H3 css={{ fontSize: "0.8rem" }}>{method === "alpha" ? "Alphabetical" : "By Length"}</H3>
         </A>
       </Stack>
 
@@ -138,20 +144,19 @@ const SortedWords = ({ words }: SortedWordProps) => {
                 gap="xs"
                 css={{ justifyContent: "stretch" }}
               >
-                <H3 css={{ textAlign: "left", paddingBottom: "1rem" }}>
-                  {char.toUpperCase()}
-                </H3>
+                <H3 css={{ textAlign: "left", paddingBottom: "1rem" }}>{char.toUpperCase()}</H3>
 
                 {Object.entries(charGroup).map(([prefix, prefixGroup]) => {
                   return prefixGroup
                     .sort((a, b) => compareWords(a, b, method))
                     .map((word, i) => {
                       const isFirst = i === 0;
+
                       return (
                         <Word
                           key={`${word}-${i}`}
                           break={isFirst}
-                          css={isFirst ? { "--label": `"${prefix}"` } : {}}
+                          css={{ "--label": isFirst && `"${prefix}"`, "--deco": getDeco(word) }}
                           pangram={checkPangram(word)}
                         >
                           <span className="word">{word}</span>
