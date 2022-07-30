@@ -54,8 +54,6 @@ const storeKeyWords = "beespy-words";
 const storeKeyHints = "beespy-hints";
 
 function App() {
-  const restoreWords = () => {};
-
   const [words, setWords] = useState<string[]>(loadLocal(storeKeyWords) || []);
   const [hints, setHints] = useState<HintProps>(loadLocal(storeKeyHints) || {});
 

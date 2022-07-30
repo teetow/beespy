@@ -30,8 +30,11 @@ const Word = styled("div", {
 
   "&:after": {
     content: "var(--deco)",
+    fontSize: "0.6em",
     gridRow: "1",
     justifySelf: "end",
+    lineHeight: "2.2em",
+    paddingLeft: "0.5em",
   },
 
   variants: {
@@ -50,7 +53,16 @@ const Word = styled("div", {
   },
 });
 
-const getDeco = (word: string) => ({ aurora: `"😸"` }[word]);
+const getDeco = (word: string) =>
+  ({
+    aurora: `"😸"`,
+    cancan: `"💃💃💃"`,
+    canna: `"🌺"`,
+    leaven: `"🍞"`,
+    valance: `"👗"`,
+    baobab: `"🌴"`,
+    koan: `"🧠"`,
+  }[word]);
 
 const groupGroupsBy = (words: string[], method: SortMethod) => {
   const groupedWords = words.reduce((acc, word) => {
