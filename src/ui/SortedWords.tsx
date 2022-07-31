@@ -56,12 +56,14 @@ const Word = styled("div", {
 const getDeco = (word: string) =>
   ({
     aurora: `"😸"`,
+    baobab: `"🌴"`,
     cancan: `"💃💃💃"`,
+    candela: `"💡"`,
     canna: `"🌺"`,
+    dace: `"🐟"`,
+    koan: `"🧠"`,
     leaven: `"🍞"`,
     valance: `"👗"`,
-    baobab: `"🌴"`,
-    koan: `"🧠"`,
   }[word]);
 
 const groupGroupsBy = (words: string[], method: SortMethod) => {
