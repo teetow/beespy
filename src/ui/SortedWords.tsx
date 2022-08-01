@@ -63,6 +63,8 @@ const getDeco = (word: string) =>
     dace: `"🐟"`,
     koan: `"🧠"`,
     leaven: `"🍞"`,
+    macadamia: `"🥜"`,
+    naiad: `"💧🕷"`,
     valance: `"👗"`,
   }[word]);
 

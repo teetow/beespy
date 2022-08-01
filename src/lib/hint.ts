@@ -114,7 +114,9 @@ export function getHint(input: string): HintProps | undefined {
 }
 /**/
 
+const pad = (date: Number) => date.toString().padStart(2, "0");
+
 export const getTodayHintUrl = (date: Date) =>
-  `https://www.nytimes.com/${date.getFullYear()}/${(date.getMonth() + 1)
-    .toString()
-    .padStart(2, "0")}/${date.getDate()}/crosswords/spelling-bee-forum.html`;
+  `https://www.nytimes.com/${date.getFullYear()}/${pad(date.getMonth() + 1)}/${pad(
+    date.getDate()
+  )}/crosswords/spelling-bee-forum.html`;
