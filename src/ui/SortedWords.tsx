@@ -61,10 +61,14 @@ const getDeco = (word: string) =>
     candela: `"💡"`,
     canna: `"🌺"`,
     dace: `"🐟"`,
+    ipecac: `"🤮"`,
     koan: `"🧠"`,
     leaven: `"🍞"`,
     macadamia: `"🥜"`,
+    mimeo: `"🖨"`,
+    mizzen: `"⛵"`,
     naiad: `"💧🕷"`,
+    peke: `"🐶"`,
     valance: `"👗"`,
   }[word]);
 
