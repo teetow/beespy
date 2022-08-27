@@ -120,3 +120,14 @@ export const getTodayHintUrl = (date: Date) =>
   `https://www.nytimes.com/${date.getFullYear()}/${pad(date.getMonth() + 1)}/${pad(
     date.getDate()
   )}/crosswords/spelling-bee-forum.html`;
+
+export const getWords = (paste: string) => {
+  const r = new Linereader(paste.split("\n"));
+
+  r.readUntilTrue((s: string) => s.indexOf("You have found") > -1);
+  r.readLine();
+  const lines = r.readUntil("ABOUT NEW YORK TIMES GAMES") as string[];
+  const remainder = lines.slice(0, lines.length - 2).map(s => s.toLowerCase());
+  return [...new Set(remainder)];
+
+};

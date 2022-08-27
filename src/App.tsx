@@ -2,7 +2,7 @@ import { ClipboardEvent, useEffect, useState } from "react";
 import { globalCss, styled } from "../stitches.config";
 import ErrorBoundary from "./ErrorBoundary";
 import Header from "./Header";
-import { getHint, HintProps } from "./lib/hint";
+import { getHint, getWords, HintProps } from "./lib/hint";
 import { isEmpty } from "./lib/utils";
 import Loader from "./Loader";
 import Overview from "./Overview";
@@ -67,13 +67,16 @@ function App() {
         setHints(h);
         storeLocal(storeKeyHints, h);
       }
+    } else if (data.includes("You have found")) {
+      const words = getWords(data);
+      setWords(words);
     } else {
       console.log("you pasted words.");
       const words = data
         .split("\n")
         .map((w) => w.trim().toLowerCase())
         .filter((w) => w !== "");
-      setWords(words);
+      setWords([...new Set(words)]);
     }
   };
 
